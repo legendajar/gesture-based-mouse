@@ -1,5 +1,7 @@
 import cv2
 import mediapipe as mp
+import util
+from detect_gesture import detect_gesture as detect_gesture
 
 mpHands = mp.solutions.hands
 hands = mpHands.Hands(
@@ -36,8 +38,9 @@ def main():
                 for lm in hand_landmarks.landmark:
                     landmarks_list.append((lm.x, lm.y))
 
-            print(landmarks_list)
-                    
+            # function for detecting gestures
+            # This will print (x, y, z), where x is the x axis and y is the y axis and z is the depth (i.e, distance of the index finger from camera)      
+            detect_gesture(frame, landmarks_list, processed)         
 
             cv2.imshow('Frame', frame)
 
