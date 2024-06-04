@@ -2,7 +2,8 @@ import mediapipe as mp
 import util
 import pyautogui
 from pynput.mouse import Button, Controller
-
+import cv2
+import random
 
 mouse = Controller()
 screen_width, screen_height = pyautogui.size()
@@ -51,7 +52,7 @@ def is_double_click(landmarks_list, thumb_index_dist):
     )
 def is_screenshot(landmarks_list, thumb_index_dist):
     return(
-        util.get_angle(landmarks_list[5], landmarks_list[6], landmarks_list [8]) > 90 and # for the angle of index finger
+        util.get_angle(landmarks_list[5], landmarks_list[6], landmarks_list [8]) <50 and # for the angle of index finger
         util.get_angle(landmarks_list[9], landmarks_list[10], landmarks_list[12]) < 50 and # for the angle of middle finger
         thumb_index_dist < 50 # for the angle between thumb and index finger
     )
@@ -74,16 +75,24 @@ def detect_gesture(frame, landmarks_list, processed):
         
         # LEFT CLICK
         elif is_left_click(landmarks_list, thumb_index_distance):
-            pyautogui.click()
+            mouse.press(Button.left)
+            mouse.release(Button.left)
+            cv2.putText(frame,"Left Click", (50, 50), cv2.FONT_HERSHEY_COMPLEX, 1, (0,255,0), 2 )
         
         # RIGHT CLICK
         elif is_right_click(landmarks_list, thumb_index_distance):
-            pyautogui.rightClick()
+            mouse.press(Button.right)
+            mouse.release(Button.right)
+            cv2.putText(frame,"Right Click", (50, 50), cv2.FONT_HERSHEY_COMPLEX, 1, (0,255,0), 2 )
 
         # DOUBLE CLICK
         elif is_double_click(landmarks_list, thumb_index_distance):
             pyautogui.doubleClick()
-
+            cv2.putText(frame,"Double Click", (50, 50), cv2.FONT_HERSHEY_COMPLEX, 1, (0,255,0), 2 )
+            
         # SCREENSHOT
         elif is_screenshot(landmarks_list, thumb_index_distance):
-            pyautogui.screenshot('screenshot.png')
+            im1 = pyautogui.screenshot()
+            label = random.randint(1, 1000)
+            im1.save(f'my_screenshot_{label}.png')
+            cv2.putText(frame,"Screenshot Taken", (50, 50), cv2.FONT_HERSHEY_COMPLEX, 1, (0,255,0), 2 )
