@@ -57,6 +57,19 @@ def is_screenshot(landmarks_list, thumb_index_dist):
         thumb_index_dist < 50 # for the angle between thumb and index finger
     )
 
+def is_volume(landmarks_list):
+    return(
+        util.get_angle(landmarks_list[4], landmarks_list[2], landmarks_list[1]) > 90 and
+        util.get_angle(landmarks_list[8], landmarks_list[6], landmarks_list[5]) > 90 and 
+        util.get_angle(landmarks_list[12], landmarks_list[10], landmarks_list[9]) < 50 and 
+        util.get_distance(landmarks_list)
+    )
+
+
+def is_zoom(landmarks_list, thumb_index_dist):
+    pass
+
+
 def detect_gesture(frame, landmarks_list, processed):
     if len(landmarks_list) >= 21:
         
@@ -94,5 +107,9 @@ def detect_gesture(frame, landmarks_list, processed):
         elif is_screenshot(landmarks_list, thumb_index_distance):
             im1 = pyautogui.screenshot()
             label = random.randint(1, 1000)
-            im1.save(f'D:\Harsh\Harsh Project\gesture-based-mouse\ss\my_screenshot_{label}.png')
+            im1.save(f'/home/legendajar/Desktop/new-projects/gesture-based-mouse/ss/my_screenshot_${label}.png')
             cv2.putText(frame,"Screenshot Taken", (50, 50), cv2.FONT_HERSHEY_COMPLEX, 1, (0,255,0), 2 )
+
+        # VOLUME
+        elif is_volume(landmarks_list):
+            cv2.putText(frame,"Volume", (50, 50), cv2.FONT_HERSHEY_COMPLEX, 1, (0,255,0), 2 )
