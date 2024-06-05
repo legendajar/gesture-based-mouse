@@ -94,5 +94,5 @@ def detect_gesture(frame, landmarks_list, processed):
         elif is_screenshot(landmarks_list, thumb_index_distance):
             im1 = pyautogui.screenshot()
             label = random.randint(1, 1000)
-            im1.save(f'my_screenshot_{label}.png')
+            im1.save(f'D:\Harsh\Harsh Project\gesture-based-mouse\ss\my_screenshot_{label}.png')
             cv2.putText(frame,"Screenshot Taken", (50, 50), cv2.FONT_HERSHEY_COMPLEX, 1, (0,255,0), 2 )
